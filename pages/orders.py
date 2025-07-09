@@ -2,6 +2,8 @@ from pages.base_page import BasePage
 from pages.locators import order_locator as loc
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+from utils.data import subtitle_empty_text
+from utils.data import success_order_text
 
 
 class Orders(BasePage):
@@ -15,7 +17,7 @@ class Orders(BasePage):
             self.driver, 10).until(ec.text_to_be_present_in_element(loc.counter_number_loc, '1')
                                    )
         assert self.find(loc.counter_number_loc).text == '1', 'Incorrect quantity of goods'
-        assert self.find(loc.success_order_text_loc).text == 'You added Ana Running Short to your shopping cart.'
+        assert self.find(loc.success_order_text_loc).text == success_order_text
 
     def remove_item_from_cart(self):
         self.find(loc.counter_number_loc).click()
@@ -24,7 +26,7 @@ class Orders(BasePage):
         subtitle_empty = WebDriverWait(
             self.driver, 10).until(ec.visibility_of_element_located(loc.subtitle_empty_loc)
                                    )
-        assert subtitle_empty.text == 'You have no items in your shopping cart.'
+        assert subtitle_empty.text == subtitle_empty_text
 
     def count_product_on_page(self):
         items = self.finds(loc.product_item_loc)

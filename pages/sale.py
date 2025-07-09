@@ -25,7 +25,7 @@ class Sale(BasePage):
     def check_correctness_links(self):
 
         for element, text in zip(loc.sale_link_data_loc, d.finish_page_title_data):
-            self.iframe_window()
+            self.closing_iframe_window()
             link = self.driver.find_element(*element).get_attribute("href")
             WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable(element)).click()
 

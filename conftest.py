@@ -13,15 +13,15 @@ def driver():
 
 
 @pytest.fixture()
-def create_account(driver):
+def account_creation_page(driver):
     return CreateAccount(driver)
 
 
 @pytest.fixture()
-def order(driver):
+def order_page(driver):
     return Orders(driver)
 
 
 @pytest.fixture()
-def sale(driver):
+def sale_page(driver):
     return Sale(driver)

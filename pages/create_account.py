@@ -2,6 +2,11 @@ from pages.base_page import BasePage
 from pages.locators import create_account_locator as loc
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+from utils.data import success_registration_expected_text
+from utils.data import email_address_error_expected_text
+from utils.data import confirm_password_error_expected_text
+from utils.data import weak_password_error_expected_text
+from utils.data import empty_required_fill_expected_text
 
 
 class CreateAccount(BasePage):
@@ -21,26 +26,23 @@ class CreateAccount(BasePage):
 
     def check_success_create(self, first_name, last_name, email):
         success_text = WebDriverWait(self.driver, 10).until(ec.visibility_of_element_located(loc.success_text_loc))
-        assert success_text.text == 'Thank you for registering with Main Website Store.'
+        assert success_text.text == success_registration_expected_text
         contact_inform = self.find(loc.contact_inform_loc)
         assert contact_inform.text == f'{first_name} {last_name}\n{email}'
 
     def check_email_address_error(self):
         email_address_error = self.find(loc.email_address_error_loc)
-        assert email_address_error.text == 'Please enter a valid email address (Ex: johndoe@domain.com).'
+        assert email_address_error.text == email_address_error_expected_text
         self.clear_fills()
 
     def check_invalid_confirm_password(self):
         confirm_password_error = self.find(loc.confirm_password_error_loc)
-        assert confirm_password_error.text == 'Please enter the same value again.'
+        assert confirm_password_error.text == confirm_password_error_expected_text
         self.clear_fills()
 
     def check_weak_password_error(self):
         weak_password_error = self.find(loc.weak_password_error_loc)
-        assert weak_password_error.text == (
-            'Minimum length of this field must be equal or greater than 8 symbols. '
-            'Leading and trailing spaces will be ignored.'
-        )
+        assert weak_password_error.text == weak_password_error_expected_text
         self.clear_fills()
 
     def check_empty_required_fill(self):
@@ -49,7 +51,7 @@ class CreateAccount(BasePage):
             self.clear_fill(field_locator)
             self.submit()
             error_text = self.find(error_locator)
-            assert error_text.text == 'This is a required field.', \
+            assert error_text.text == empty_required_fill_expected_text, \
                 f'Expected error message not found for {error_locator}'
             self.find(field_locator).send_keys(field_text)
 
