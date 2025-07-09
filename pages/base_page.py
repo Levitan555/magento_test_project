@@ -23,14 +23,14 @@ class BasePage:
     def finds(self, locator):
         return self.driver.find_elements(*locator)
 
-    def consent(self):
+    def approve_window_consent(self):
         try:
             button_consent = WebDriverWait(self.driver, 5).until(ec.element_to_be_clickable(loc.consent_loc))
             button_consent.click()
         except Exception as e:
             print('The consent window did not appear', e)
 
-    def iframe_window(self):
+    def closing_iframe_window(self):
         try:
             WebDriverWait(self.driver, 2).until(
                 ec.frame_to_be_available_and_switch_to_it(loc.iframe_loc)
@@ -42,13 +42,12 @@ class BasePage:
             self.driver.switch_to.default_content()
             # Эту часть кода я нагло слизал с нейронки, потому что просто замучился отключать рекламу другими способами
             self.driver.execute_script("""
-                // Удаляем hash, overlay и все рекламные элементы
                 if (window.location.hash === "#google_vignette") {
                     history.replaceState(null, "", window.location.pathname + window.location.search);
                 }
                 document.querySelectorAll(
-                    'ins.adsbygoogle, .adsbygoogle, #google_vignette, .google_vignette, 
-                    .grecaptcha-badge, div[id^="aswift"], iframe[id^="aswift"]'
+                'ins.adsbygoogle, .adsbygoogle, #google_vignette, .google_vignette, ' +
+                '.grecaptcha-badge, div[id^="aswift"], iframe[id^="aswift"]'
                 ).forEach(e => e.remove());
                 var host = document.getElementById('aswift_1_host');
                 if (host) host.remove();
